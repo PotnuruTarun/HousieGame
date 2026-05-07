@@ -5,12 +5,12 @@ import Game from './pages/Game';
 import JoinRoom from './pages/JoinRoom';
 import io from 'socket.io-client';
 
-const socket = io(import.meta.env.VITE_SERVER_URL || 'http://localhost:5000');
+const socket = io(import.meta.env.VITE_SERVER_URL || 'https://housiegame-1.onrender.com');
 
 function App() {
-  const [roomData, setRoomData]     = useState(null);
+  const [roomData, setRoomData] = useState(null);
   const [playerName, setPlayerName] = useState('');
-  const [isHost, setIsHost]         = useState(false);
+  const [isHost, setIsHost] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
