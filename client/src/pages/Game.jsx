@@ -241,7 +241,16 @@ export default function Game({ socket, roomData, playerName, isHost, setIsHost }
         </div>
 
         {/* CENTER: History + Ticket + Claims */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, overflow: isMobile ? 'auto' : 'hidden', minHeight: 0, flex: 1 }}>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: 10, 
+          overflowY: isMobile ? 'auto' : 'hidden', 
+          minHeight: 0, 
+          flex: 1,
+          paddingBottom: isMobile ? 120 : 0, // Extra space at bottom for mobile scrolling
+          WebkitOverflowScrolling: 'touch'
+        }}>
 
           {/* Call History */}
           {calledNums.length > 0 && (
@@ -314,18 +323,31 @@ export default function Game({ socket, roomData, playerName, isHost, setIsHost }
           </div>
 
           {/* Claim Prizes */}
-          <div style={{ ...panel({ padding: isMobile ? '10px' : '10px 14px' }), flexShrink: 0 }}>
-            <p style={{ ...label, marginBottom: 10 }}>The prize points </p>
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)', gap: isMobile ? 8 : 7 }}>
+          <div style={{ ...panel({ padding: isMobile ? '12px' : '10px 14px' }), flexShrink: 0, marginBottom: isMobile ? 20 : 0 }}>
+            <p style={{ ...label, marginBottom: 10 }}>Prizes</p>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)', gap: isMobile ? 10 : 7 }}>
               {CLAIMS.filter(c => !c.featured).map(c => {
                 const isClaimed = claimedPrizes.has(c.key);
                 const winner = claims.find(cl => cl.claimType === c.key);
                 return (
                   <button key={c.key} disabled={isClaimed} onClick={() => doClaim(c.key)}
-                    style={{ padding: isMobile ? '8px 4px' : '10px 4px', borderRadius: 9, border: `1px solid ${isClaimed ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.12)'}`, background: isClaimed ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.06)', color: 'white', cursor: isClaimed ? 'not-allowed' : 'pointer', fontFamily: G.font, fontWeight: 600, fontSize: isMobile ? '0.85rem' : '0.92rem', textAlign: 'center', opacity: isClaimed ? 0.5 : 1 }}>
-                    <span style={{ display: 'block', fontSize: isMobile ? '1rem' : '1.1rem', marginBottom: 3 }}>{c.emoji}</span>
+                    style={{ 
+                      padding: isMobile ? '10px 4px' : '10px 4px', 
+                      borderRadius: 12, 
+                      border: `1px solid ${isClaimed ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.12)'}`, 
+                      background: isClaimed ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.06)', 
+                      color: 'white', 
+                      cursor: isClaimed ? 'not-allowed' : 'pointer', 
+                      fontFamily: G.font, 
+                      fontWeight: 600, 
+                      fontSize: isMobile ? '0.8rem' : '0.92rem', 
+                      textAlign: 'center', 
+                      opacity: isClaimed ? 0.5 : 1,
+                      minHeight: isMobile ? 60 : 'auto'
+                    }}>
+                    <span style={{ display: 'block', fontSize: isMobile ? '0.9rem' : '1.1rem', marginBottom: 2 }}>{c.emoji}</span>
                     {c.label}
-                    {isClaimed && <span style={{ display: 'block', fontSize: '0.68rem', color: '#f472b6', marginTop: 3 }}>✓ {winner?.playerName}</span>}
+                    {isClaimed && <span style={{ display: 'block', fontSize: '0.62rem', color: '#f472b6', marginTop: 2 }}>✓ {winner?.playerName}</span>}
                   </button>
                 );
               })}
@@ -334,8 +356,23 @@ export default function Game({ socket, roomData, playerName, isHost, setIsHost }
                 const winner = claims.find(cl => cl.claimType === 'fullHousie');
                 return (
                   <button disabled={isClaimed} onClick={() => doClaim('fullHousie')}
-                    style={{ gridColumn: isMobile ? 'span 2' : 'auto', padding: '10px 8px', borderRadius: 9, border: 'none', background: isClaimed ? 'rgba(232,62,140,0.12)' : 'linear-gradient(135deg,#e83e8c,#c41f6e)', color: 'white', cursor: isClaimed ? 'not-allowed' : 'pointer', fontFamily: G.font, fontWeight: 800, fontSize: isMobile ? '0.9rem' : '0.82rem', textAlign: 'center', opacity: isClaimed ? 0.5 : 1, boxShadow: isClaimed ? 'none' : '0 0 16px rgba(232,62,140,0.45)' }}>
-                    <span style={{ display: 'block', fontSize: isMobile ? '1.1rem' : '1rem', marginBottom: 2 }}>🏠</span>
+                    style={{ 
+                      gridColumn: isMobile ? 'span 2' : 'auto', 
+                      padding: '12px 8px', 
+                      borderRadius: 12, 
+                      border: 'none', 
+                      background: isClaimed ? 'rgba(232,62,140,0.12)' : 'linear-gradient(135deg,#e83e8c,#c41f6e)', 
+                      color: 'white', 
+                      cursor: isClaimed ? 'not-allowed' : 'pointer', 
+                      fontFamily: G.font, 
+                      fontWeight: 800, 
+                      fontSize: isMobile ? '0.95rem' : '0.82rem', 
+                      textAlign: 'center', 
+                      opacity: isClaimed ? 0.5 : 1, 
+                      boxShadow: isClaimed ? 'none' : '0 6px 20px rgba(232,62,140,0.4)',
+                      minHeight: isMobile ? 64 : 'auto'
+                    }}>
+                    <span style={{ display: 'block', fontSize: isMobile ? '1rem' : '1rem', marginBottom: 2 }}>🏠</span>
                     Full House
                     {isClaimed && <span style={{ display: 'block', fontSize: '0.6rem', marginTop: 2 }}>✓ {winner?.playerName}</span>}
                   </button>
