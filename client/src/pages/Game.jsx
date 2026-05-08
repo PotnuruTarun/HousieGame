@@ -166,8 +166,40 @@ export default function Game({ socket, roomData, playerName, isHost, setIsHost }
       {/* ── TOP BAR ── */}
       <header style={{ height: 58, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(20px)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 6 : 12 }}>
-          {!isMobile && <div style={{ width: 30, height: 30, borderRadius: 8, background: 'linear-gradient(135deg,#6c4ef5,#e83e8c)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 15 }}>T</div>}
-          <span style={{ fontWeight: 800, fontSize: isMobile ? '0.9rem' : '1.15rem', letterSpacing: '-0.5px' }}>Tambola.io</span>
+          {!isMobile && (
+            <div style={{ position: 'relative', width: 42, height: 32, marginRight: 8 }}>
+              {/* Stylized Ticket Background */}
+              <div style={{
+                width: 34, height: 24, background: 'rgba(255,255,255,0.08)', borderRadius: 4, border: '1.5px solid rgba(255,255,255,0.15)',
+                transform: 'rotate(-12deg)', position: 'absolute', left: 0, top: 2, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1.5, padding: 2.5,
+                boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+              }}>
+                {[1, 0, 1, 0, 1, 0, 1, 1, 0].map((v, i) => (
+                  <div key={i} style={{ background: v ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.03)', borderRadius: 1 }} />
+                ))}
+              </div>
+              {/* Glowing Numbered Ball */}
+              <div style={{
+                width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
+                border: '2px solid #fff', position: 'absolute', right: -2, bottom: -2, display: 'flex', alignItems: 'center',
+                justifyContent: 'center', fontSize: 10, fontWeight: 900, color: '#fff', boxShadow: '0 4px 12px rgba(124,58,237,0.6)',
+                zIndex: 2, transform: 'scale(1.1)'
+              }}>
+                T
+              </div>
+            </div>
+          )}
+          <span style={{
+            fontWeight: 900,
+            fontSize: isMobile ? '1.1rem' : '1.35rem',
+            letterSpacing: '-0.8px',
+            background: 'linear-gradient(to bottom, #fff 40%, #a78bfa 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: '0 10px 20px rgba(167,139,250,0.2)'
+          }}>
+            TAMBOLA.io
+          </span>
           <div style={{ padding: isMobile ? '3px 8px' : '4px 14px', borderRadius: 7, background: 'rgba(108,78,245,0.15)', border: '1px solid rgba(108,78,245,0.3)', fontSize: isMobile ? '0.75rem' : '0.92rem', fontWeight: 700, color: '#a78bfa', letterSpacing: '0.1em' }}>#{roomId}</div>
           {lastNum && (
             <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 4 : 7 }}>
@@ -241,12 +273,12 @@ export default function Game({ socket, roomData, playerName, isHost, setIsHost }
         </div>
 
         {/* CENTER: History + Ticket + Claims */}
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: 10, 
-          overflowY: isMobile ? 'auto' : 'hidden', 
-          minHeight: 0, 
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 10,
+          overflowY: isMobile ? 'auto' : 'hidden',
+          minHeight: 0,
           flex: 1,
           paddingBottom: isMobile ? 120 : 0, // Extra space at bottom for mobile scrolling
           WebkitOverflowScrolling: 'touch'
@@ -331,17 +363,17 @@ export default function Game({ socket, roomData, playerName, isHost, setIsHost }
                 const winner = claims.find(cl => cl.claimType === c.key);
                 return (
                   <button key={c.key} disabled={isClaimed} onClick={() => doClaim(c.key)}
-                    style={{ 
-                      padding: isMobile ? '10px 4px' : '10px 4px', 
-                      borderRadius: 12, 
-                      border: `1px solid ${isClaimed ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.12)'}`, 
-                      background: isClaimed ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.06)', 
-                      color: 'white', 
-                      cursor: isClaimed ? 'not-allowed' : 'pointer', 
-                      fontFamily: G.font, 
-                      fontWeight: 600, 
-                      fontSize: isMobile ? '0.8rem' : '0.92rem', 
-                      textAlign: 'center', 
+                    style={{
+                      padding: isMobile ? '10px 4px' : '10px 4px',
+                      borderRadius: 12,
+                      border: `1px solid ${isClaimed ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.12)'}`,
+                      background: isClaimed ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.06)',
+                      color: 'white',
+                      cursor: isClaimed ? 'not-allowed' : 'pointer',
+                      fontFamily: G.font,
+                      fontWeight: 600,
+                      fontSize: isMobile ? '0.8rem' : '0.92rem',
+                      textAlign: 'center',
                       opacity: isClaimed ? 0.5 : 1,
                       minHeight: isMobile ? 60 : 'auto'
                     }}>
@@ -356,19 +388,19 @@ export default function Game({ socket, roomData, playerName, isHost, setIsHost }
                 const winner = claims.find(cl => cl.claimType === 'fullHousie');
                 return (
                   <button disabled={isClaimed} onClick={() => doClaim('fullHousie')}
-                    style={{ 
-                      gridColumn: isMobile ? 'span 2' : 'auto', 
-                      padding: '12px 8px', 
-                      borderRadius: 12, 
-                      border: 'none', 
-                      background: isClaimed ? 'rgba(232,62,140,0.12)' : 'linear-gradient(135deg,#e83e8c,#c41f6e)', 
-                      color: 'white', 
-                      cursor: isClaimed ? 'not-allowed' : 'pointer', 
-                      fontFamily: G.font, 
-                      fontWeight: 800, 
-                      fontSize: isMobile ? '0.95rem' : '0.82rem', 
-                      textAlign: 'center', 
-                      opacity: isClaimed ? 0.5 : 1, 
+                    style={{
+                      gridColumn: isMobile ? 'span 2' : 'auto',
+                      padding: '12px 8px',
+                      borderRadius: 12,
+                      border: 'none',
+                      background: isClaimed ? 'rgba(232,62,140,0.12)' : 'linear-gradient(135deg,#e83e8c,#c41f6e)',
+                      color: 'white',
+                      cursor: isClaimed ? 'not-allowed' : 'pointer',
+                      fontFamily: G.font,
+                      fontWeight: 800,
+                      fontSize: isMobile ? '0.95rem' : '0.82rem',
+                      textAlign: 'center',
+                      opacity: isClaimed ? 0.5 : 1,
                       boxShadow: isClaimed ? 'none' : '0 6px 20px rgba(232,62,140,0.4)',
                       minHeight: isMobile ? 64 : 'auto'
                     }}>
